@@ -1,0 +1,25 @@
+digraph activity {
+    graph [rankdir=TB, fontname="Liberation Sans", bgcolor=white, nodesep=0.35, ranksep=0.32];
+    node [fontname="Liberation Sans", fontsize=11, shape=box, style="rounded,filled", fillcolor="#E8F5E9", color="#2E7D32"];
+    edge [color="#616161", fontname="Liberation Sans", fontsize=10];
+    start [label="Нажата кнопка «Добавить»", shape=box, style="rounded,filled", fillcolor="#C8E6C9"];
+    q1 [label="Расход больше\nтекущего баланса?", shape=diamond, fillcolor="#FFF8E1", color="#F9A825"];
+    q2 [label="Пользователь\nподтвердил?", shape=diamond, fillcolor="#FFF8E1", color="#F9A825"];
+    v [label="Проверка полей:\nдата ДД.ММ.ГГГГ, не в будущем, не раньше 2000 г.;\nсумма > 0, ≤ 10 000 000, не более 2 знаков после запятой;\nвыбраны категория и член семьи; комментарий ≤ 200 символов"];
+    q3 [label="Все поля\nкорректны?", shape=diamond, fillcolor="#FFF8E1", color="#F9A825"];
+    err [label="Окно «Ошибка ввода»:\nчто не так и как исправить", fillcolor="#FFEBEE", color="#C62828"];
+    save [label="INSERT в таблицу operations"];
+    ok [label="Сообщение «Операция успешно добавлена»,\nочистка формы, обновление таблицы", fillcolor="#C8E6C9"];
+    cancel [label="Операция не добавлена", fillcolor="#EEEEEE", color="#757575"];
+    start -> q1;
+    q1 -> q2 [label="да"];
+    q1 -> v [label="нет"];
+    q2 -> v [label="да"];
+    q2 -> cancel [label="нет"];
+    v -> q3;
+    q3 -> save [label="да"];
+    q3 -> err [label="нет"];
+    save -> ok;
+    {rank=same; q2; cancel}
+    {rank=same; save; err}
+}

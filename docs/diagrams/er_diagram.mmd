@@ -1,0 +1,21 @@
+erDiagram
+    family_members ||--o{ operations : "совершает"
+    categories ||--o{ operations : "классифицирует"
+    family_members {
+        INTEGER id PK
+        TEXT full_name "ФИО"
+        TEXT role "роль в семье"
+    }
+    categories {
+        INTEGER id PK
+        TEXT name UK "название"
+        TEXT kind "Доход или Расход"
+    }
+    operations {
+        INTEGER id PK
+        TEXT operation_date "дата ГГГГ-ММ-ДД"
+        REAL amount "сумма больше 0"
+        INTEGER category_id FK
+        INTEGER member_id FK
+        TEXT comment "комментарий"
+    }

@@ -1,0 +1,29 @@
+digraph architecture {
+    graph [rankdir=TB, fontname="Liberation Sans", fontsize=14, nodesep=0.25, ranksep=0.5, bgcolor=white];
+    node [shape=box, style="rounded,filled", fillcolor="#EEEEEE", color="#757575", fontname="Liberation Sans", fontsize=12];
+    edge [color="#616161"];
+    subgraph cluster_ui {
+        label="Слой представления (app/ui) — окна и компоненты"; style="rounded"; color="#2E7D32"; fontcolor="#1B5E20";
+        MainWindow; OperationsWindow; CategoriesWindow; MembersWindow; ReportWindow; Components [label="DataTable, FormPanel"];
+    }
+    subgraph cluster_bl {
+        label="Слой бизнес-логики (app/services) — правила и проверки"; style="rounded"; color="#2E7D32"; fontcolor="#1B5E20";
+        OperationService; CategoryService; MemberService; ReportService; Validators [label="validators, errors"];
+    }
+    subgraph cluster_dal {
+        label="Слой доступа к данным (app/database) — SQL-запросы"; style="rounded"; color="#2E7D32"; fontcolor="#1B5E20";
+        OperationRepository; CategoryRepository; MemberRepository; Database;
+    }
+    Models [label="Сущности (app/models):\nFamilyMember, Category, Operation", fillcolor="#FFF8E1"];
+    File [label="Файл SQLite\ndata/family_budget.db", shape=cylinder, fillcolor="#FFF8E1"];
+    OperationsWindow -> OperationService [lhead=cluster_bl];
+    OperationService -> OperationRepository;
+    CategoryService -> CategoryRepository;
+    MemberService -> MemberRepository;
+    ReportService -> OperationRepository;
+    OperationRepository -> Database; CategoryRepository -> Database; MemberRepository -> Database;
+    Database -> File;
+    MainWindow -> ReportService [style=invis];
+    CategoriesWindow -> CategoryService; MembersWindow -> MemberService; ReportWindow -> ReportService;
+    MemberRepository -> Models [style=dashed];
+}

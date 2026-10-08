@@ -1,0 +1,35 @@
+sequenceDiagram
+    autonumber
+    actor U as Пользователь
+    participant W as OperationsWindow<br/>(окно «Операции»)
+    participant S as OperationService<br/>(бизнес-логика)
+    participant V as validators<br/>(проверка ввода)
+    participant R as OperationRepository<br/>(доступ к данным)
+    participant DB as SQLite<br/>family_budget.db
+    U->>W: Заполняет форму и нажимает «Добавить»
+    W->>S: is_expense_above_balance(сумма, категория)
+    S->>R: get_summary()
+    R->>DB: SELECT SUM(...)
+    DB-->>R: доходы, расходы
+    R-->>S: BudgetSummary
+    S-->>W: True / False
+    alt Расход больше баланса
+        W->>U: Запрос подтверждения
+        U-->>W: «Да» или «Нет»
+    end
+    W->>S: add(дата, сумма, категория, член семьи, комментарий)
+    S->>V: parse_date(), parse_amount()
+    alt Данные некорректны
+        V-->>S: ValidationError
+        S-->>W: ValidationError
+        W->>U: Окно «Ошибка ввода» с описанием ошибки
+    else Данные корректны
+        V-->>S: дата, сумма
+        S->>R: add(Operation)
+        R->>DB: INSERT INTO operations
+        DB-->>R: id новой записи
+        R-->>S: id
+        S-->>W: id
+        W->>U: Сообщение «Операция успешно добавлена»
+        W->>W: refresh_table()
+    end

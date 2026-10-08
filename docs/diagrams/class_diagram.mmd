@@ -1,0 +1,66 @@
+classDiagram
+    direction LR
+    class FamilyMember {
+        +member_id: int
+        +full_name: str
+        +role: str
+    }
+    class Category {
+        +category_id: int
+        +name: str
+        +kind: str
+        +display_name() str
+        +is_expense() bool
+    }
+    class Operation {
+        +operation_id: int
+        +operation_date: date
+        +amount: float
+        +category_id: int
+        +member_id: int
+        +comment: str
+    }
+    class OperationService {
+        +find(kind, search_text)
+        +add(...)
+        +update(...)
+        +delete(operation_id)
+        +is_expense_above_balance(amount, category_id)
+    }
+    class CategoryService {
+        +get_all()
+        +add(name, kind)
+        +update(category_id, name, kind)
+        +delete(category_id)
+    }
+    class MemberService {
+        +get_all()
+        +add(full_name, role)
+        +update(member_id, full_name, role)
+        +delete(member_id)
+    }
+    class ReportService {
+        +get_summary()
+        +build_category_report(date_from, date_to)
+        +export_to_csv(rows, file_path)
+    }
+    class OperationRepository
+    class CategoryRepository
+    class MemberRepository
+    class Database {
+        +execute(sql, params)
+        +fetch_all(sql, params)
+        +fetch_one(sql, params)
+    }
+    OperationService --> OperationRepository
+    OperationService --> CategoryRepository
+    OperationService --> MemberRepository
+    CategoryService --> CategoryRepository
+    MemberService --> MemberRepository
+    ReportService --> OperationRepository
+    OperationRepository --> Database
+    CategoryRepository --> Database
+    MemberRepository --> Database
+    OperationRepository ..> Operation
+    CategoryRepository ..> Category
+    MemberRepository ..> FamilyMember
