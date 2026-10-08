@@ -99,6 +99,7 @@ family_budget/
 
 ## Документация
 
+- [Презентация проекта (PDF)](docs/presentation/presentation.pdf) · [PowerPoint](docs/presentation/presentation.pptx)
 - [Руководство пользователя](docs/user_guide.md)
 - [Техническое задание](docs/technical_specification.md)
 - [Руководство по стилю интерфейса](docs/style_guide.md)
